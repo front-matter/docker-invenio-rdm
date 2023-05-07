@@ -18,7 +18,7 @@ The Compose file included here uses existing Docker images for InvenioRDM and it
 
 **Database migrations**
 
-InvenioRDM uses Alembic for database migrations. To run pending migrations, use the following command, which will run the migrations in the container:
+InvenioRDM uses [Alembic](https://alembic.sqlalchemy.org/en/latest/) for database migrations. To run pending migrations, use the following command (which will run the migrations in the container):
 
 ```bash
 docker exec -it docker-invenio-rdm-web-api-1 invenio alembic upgrade heads
