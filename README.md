@@ -4,9 +4,9 @@ Docker Compose configuration for [InvenioRDM](https://inveniordm.docs.cern.ch/).
 
 [Compose](https://docs.docker.com/compose/) is a part of the Docker application, used for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. 
 
-Compose is the easiest way to run [InvenioRDM](https://inveniordm.docs.cern.ch/). This makes Docker Compose perfect for development, testing, and staging environments, it is not recommended to use it in production.
+Compose is the easiest way to run [InvenioRDM](https://inveniordm.docs.cern.ch/). This makes Docker Compose perfect for development, testing, and staging environments, but it is not recommended to use it in production. (for production deployments, use a container orchestrator such as [Kubernetes](https://kubernetes.io/), [Elastic Container Service](https://aws.amazon.com/ecs/), or [Nomad](https://www.nomadproject.io/).)
 
-The Compose file included here uses existing Docker images for InvenioRDM and its dependencies. It does not build images from source, and it does not have other dependencies besider Docker itself.
+The Compose file included here uses existing Docker images for InvenioRDM and its dependencies. It does not build images from source, and it does not have other dependencies besider Docker itself. The initial setup of InvenioRDM should not take more than 15 minutes.
 
 ## Getting Started
 
