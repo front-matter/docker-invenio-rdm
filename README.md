@@ -30,9 +30,13 @@ docker exec -it docker-invenio-rdm-web-api-1 invenio alembic upgrade heads
 ```bash
 docker exec -it docker-invenio-rdm-web-api-1 invenio index destroy --force --yes-i-know
 docker exec -it docker-invenio-rdm-web-api-1 invenio index init
-docker exec -it docker-invenio-rdm-web-api-1 invenio rdm-records fixtures
 docker exec -it docker-invenio-rdm-web-api-1 invenio rdm rebuild-all-indices
 docker exec -it docker-invenio-rdm-web-api-1 invenio index run
+```
+**Fixtures**
+
+```bash
+docker exec -it docker-invenio-rdm-web-api-1 invenio rdm-records fixtures
 ```
 
 ## Customization
