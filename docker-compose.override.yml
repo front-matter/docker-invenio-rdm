@@ -1,0 +1,5 @@
+version: "3.8"
+services:
+  web-ui:
+    environment:
+      - "INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=False"

@@ -6,7 +6,7 @@
 #
 # Usage::
 #
-#   $ docker compose up -d
+#   $ docker compose up
 #
 # The following services are included:
 # - Frontend: Nginx (exposed ports: 40 and 443)
@@ -44,7 +44,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: "info@invenio-rdm.com"
       PGADMIN_DEFAULT_PASSWORD: "invenio-rdm"
     volumes:
-      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json
+      - ./data/pgadmin/servers.json:/pgadmin4/servers.json
   mq:
     image: rabbitmq:3-management
     restart: "unless-stopped"
@@ -105,13 +105,14 @@ services:
       - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
+      - "INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=True"
     command: ["uwsgi /opt/invenio/var/instance/uwsgi_ui.ini"]
     ports:
       - "5000"
     volumes:
       - static_data:/opt/invenio/var/instance/static
-      - uploaded_data:/opt/invenio/var/instance/data
-      - archived_data:/opt/invenio/var/instance/archive
+      - ./data/uploaded_data:/opt/invenio/var/instance/data
+      - ./data/archived_data:/opt/invenio/var/instance/archive
   web-api:
     image: ghcr.io/front-matter/invenio-rdm:v11.0
     restart: "unless-stopped"
@@ -131,8 +132,9 @@ services:
     ports:
       - "5000"
     volumes:
-      - uploaded_data:/opt/invenio/var/instance/data
-      - archived_data:/opt/invenio/var/instance/archive
+      - ./data/app_data:/opt/invenio/var/instance/app_data
+      - ./data/uploaded_data:/opt/invenio/var/instance/data
+      - ./data/archived_data:/opt/invenio/var/instance/archive
   worker:
     image: ghcr.io/front-matter/invenio-rdm:v11.0
     restart: "unless-stopped"
@@ -150,7 +152,7 @@ services:
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
     command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
     volumes:
-      - uploaded_data:/opt/invenio/var/instance/data
+      - ./data/uploaded_data:/opt/invenio/var/instance/data
     depends_on:
       search:
         condition: service_started
@@ -161,6 +163,7 @@ services:
       mq:
         condition: service_started
 volumes:
+  app_data:
   static_data:
   uploaded_data:
   archived_data:
