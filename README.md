@@ -11,6 +11,7 @@ The Compose file included here uses existing Docker images for InvenioRDM and it
 ## Getting Started
 
 * [Install Docker](https://docs.docker.com/install/)
+* [Clone this repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 * Start Compose with `docker compose up`
 * Access the InvenioRDM application at `https://127.0.0.1` (web frontend) or `https://127.0.0.1/api/records` (REST API).
 
