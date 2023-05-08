@@ -1,8 +1,8 @@
+![Screenshot](screenshot.png)
+
 # docker-invenio-rdm
 
 ![License](https://img.shields.io/github/license/front-matter/docker-invenio-rdm.svg)
-
-![Screenshot](screenshot.png)
 
 Docker Compose configuration for [InvenioRDM](https://inveniordm.docs.cern.ch/), the turn-key research data management repository.
 
