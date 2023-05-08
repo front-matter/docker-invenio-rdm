@@ -10,7 +10,6 @@ invenio rdm-records fixtures
 invenio rdm-records demo communities
 invenio rdm-records demo records
 
-# create opensearch indices
+# refresh opensearch indices
 invenio index destroy --force --yes-i-know
-invenio rdm-records rebuild-index
-invenio index run
+invenio index init
