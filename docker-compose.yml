@@ -13,9 +13,9 @@
 # - UI application: UWSGI (not exposed)
 # - API application: UWSGI (not exposed)
 # - Cache: Redis (exposed port: 6379)
-# - DB: (PostgresSQL/MySQL) (exposed port: 5432 or 3306)
+# - DB: (PostgresSQL) (exposed port: 5432)
 # - Message queue: RabbitMQ (exposed ports: 5672, 15672)
-# - Search platform: OpenSearch (exposed ports: 9200, 9300)
+# - Search platform: OpenSearch (exposed ports: 9200, 9600)
 # - OpenSearch Dashboard (view OS indexes) (exposed ports: 5601)
 
 version: "3.8"
@@ -109,8 +109,8 @@ services:
       - "5000"
     volumes:
       - static_data:/opt/invenio/var/instance/static
-      - ./data/uploaded_data:/opt/invenio/var/instance/data
-      - ./data/archived_data:/opt/invenio/var/instance/archive
+      - uploaded_data:/opt/invenio/var/instance/data
+      - archived_data:/opt/invenio/var/instance/archive
   web-api:
     image: ghcr.io/front-matter/invenio-rdm:v11.0
     restart: "unless-stopped"
@@ -130,9 +130,9 @@ services:
     ports:
       - "5000"
     volumes:
-      - ./data/app_data:/opt/invenio/var/instance/app_data
-      - ./data/uploaded_data:/opt/invenio/var/instance/data
-      - ./data/archived_data:/opt/invenio/var/instance/archive
+      - ./invenio/app_data:/opt/invenio/var/instance/app_data
+      - uploaded_data:/opt/invenio/var/instance/data
+      - archived_data:/opt/invenio/var/instance/archive
   worker:
     image: ghcr.io/front-matter/invenio-rdm:v11.0
     restart: "unless-stopped"
@@ -150,7 +150,7 @@ services:
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
     command: ["celery -A invenio_app.celery worker --beat --loglevel=WARNING"]
     volumes:
-      - ./data/uploaded_data:/opt/invenio/var/instance/data
+      - uploaded_data:/opt/invenio/var/instance/data
     depends_on:
       search:
         condition: service_started
@@ -186,9 +186,8 @@ services:
       mq:
         condition: service_started
     volumes:
-      - ./data/scripts/init.sh:/opt/invenio/src/init.sh
+      - ./invenio/init.sh:/opt/invenio/src/init.sh
 volumes:
-  app_data:
   static_data:
   uploaded_data:
   archived_data:
