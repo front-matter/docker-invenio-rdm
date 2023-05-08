@@ -1,6 +1,6 @@
 # docker-invenio-rdm
 
-[![License](https://img.shields.io/github/license/front-matter/docker-invenio-rdm.svg)](
+![License](https://img.shields.io/github/license/front-matter/docker-invenio-rdm.svg)
 
 ![Screenshot](screenshot.png)
 
