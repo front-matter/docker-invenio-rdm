@@ -15,33 +15,9 @@ The Compose file included here uses existing Docker images for InvenioRDM and it
 1. Start Compose with `docker compose up`
 1. Access the InvenioRDM application at `https://127.0.0.1` (web frontend) or `https://127.0.0.1/api/records` (REST API).
 
-## Setup
-
-**Database migrations**
-
-InvenioRDM uses [Alembic](https://alembic.sqlalchemy.org/en/latest/) for database migrations. To run pending migrations, use the following command (which will run the migrations in the container):
-
-```bash
-docker exec -it docker-invenio-rdm-web-api-1 invenio alembic upgrade heads
-```
-
-**Opensearch index**
-
-```bash
-docker exec -it docker-invenio-rdm-web-api-1 invenio index destroy --force --yes-i-know
-docker exec -it docker-invenio-rdm-web-api-1 invenio index init
-docker exec -it docker-invenio-rdm-web-api-1 invenio rdm rebuild-all-indices
-docker exec -it docker-invenio-rdm-web-api-1 invenio index run
-```
-**Fixtures**
-
-```bash
-docker exec -it docker-invenio-rdm-web-api-1 invenio rdm-records fixtures
-```
-
 ## Customization
 
-* Override the default configuration by changing the `docker-compose.override.yml` file.
+* Override the default configuration by creating an `docker-compose.override.yml` file. Use `docker-compose.override.yml.example` as a starting point.
 * More info on [Customizing InvenioRDM](https://inveniordm.docs.cern.ch/customize/)
 
 ## Documentation

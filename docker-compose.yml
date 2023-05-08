@@ -148,7 +148,7 @@ services:
       - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-    command: ["celery -A invenio_app.celery worker --beat --loglevel=INFO"]
+    command: ["celery -A invenio_app.celery worker --beat --loglevel=WARNING"]
     volumes:
       - ./data/uploaded_data:/opt/invenio/var/instance/data
     depends_on:
@@ -160,6 +160,33 @@ services:
         condition: service_started
       mq:
         condition: service_started
+  web-api-init:
+    image: ghcr.io/front-matter/invenio-rdm:v11.0
+    restart: "no"
+    environment:
+      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
+      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
+      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
+      - "INVENIO_CACHE_TYPE=redis"
+      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
+      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
+      - "INVENIO_SEARCH_HOSTS=['search:9200']"
+      - "INVENIO_SECRET_KEY=CHANGE_ME"
+      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
+      - "INVENIO_WSGI_PROXIES=2"
+      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
+    entrypoint: [ "bash", "init.sh"] 
+    depends_on:
+      search:
+        condition: service_started
+      cache:
+        condition: service_started
+      db:
+        condition: service_started
+      mq:
+        condition: service_started
+    volumes:
+      - ./data/scripts/init.sh:/opt/invenio/src/init.sh
 volumes:
   app_data:
   static_data:
