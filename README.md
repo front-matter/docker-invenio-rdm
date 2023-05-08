@@ -1,5 +1,9 @@
 # docker-invenio-rdm
 
+[![License](https://img.shields.io/github/license/front-matter/docker-invenio-rdm.svg)](
+
+![Screenshot](screenshot.png)
+
 Docker Compose configuration for [InvenioRDM](https://inveniordm.docs.cern.ch/), the turn-key research data management repository.
 
 [Compose](https://docs.docker.com/compose/) is a part of the Docker application, used for defining and running multi-container Docker applications. With Compose, you use a YAML file to configure your application's services. 
