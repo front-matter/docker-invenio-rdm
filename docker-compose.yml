@@ -104,7 +104,7 @@ services:
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
       - "INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=True"
-    command: ["uwsgi /opt/invenio/var/instance/uwsgi_ui.ini"]
+    command: ["uwsgi /opt/invenio/var/instance/uwsgi_ui.ini --uid invenio"]
     ports:
       - "5000"
     volumes:
@@ -126,7 +126,7 @@ services:
       - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-    command: ["uwsgi /opt/invenio/var/instance/uwsgi_rest.ini"]
+    command: ["uwsgi /opt/invenio/var/instance/uwsgi_rest.ini --uid invenio"]
     ports:
       - "5000"
     volumes:
