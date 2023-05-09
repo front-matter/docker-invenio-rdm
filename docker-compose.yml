@@ -46,9 +46,18 @@ services:
   mq:
     image: rabbitmq:3-management
     restart: "unless-stopped"
+    environment:
+      - "RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{error}]"
     ports:
       - "15672:15672"
       - "5672:5672"
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    logging:
+      driver: 'none'  # disable saving logs
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
   search:
     image: opensearchproject/opensearch:2.3.0
     restart: "unless-stopped"
@@ -79,7 +88,7 @@ services:
       - 'OPENSEARCH_HOSTS=["http://search:9200"]'
       - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
   frontend:
-    image: ghcr.io/front-matter/invenio-rdm-frontend:v11.0
+    image: ghcr.io/front-matter/invenio-rdm-frontend:v12.0.0b2.dev2
     restart: "unless-stopped"
     volumes:
       - static_data:/opt/invenio/var/instance/static
@@ -90,7 +99,7 @@ services:
       - "80:80"
       - "443:443"
   web-ui:
-    image: ghcr.io/front-matter/invenio-rdm:v11.0
+    image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     environment:
       - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
       - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
@@ -104,15 +113,16 @@ services:
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
       - "INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=True"
+      - "INVENIO_DATACITE_ENABLED=True"
     command: ["uwsgi /opt/invenio/var/instance/uwsgi_ui.ini --uid invenio"]
     ports:
       - "5000"
     volumes:
       - static_data:/opt/invenio/var/instance/static
-      - uploaded_data:/opt/invenio/var/instance/data
-      - archived_data:/opt/invenio/var/instance/archive
+      - ./invenio/uploaded_data:/opt/invenio/var/instance/data
+      - ./invenio/archived_data:/opt/invenio/var/instance/archive
   web-api:
-    image: ghcr.io/front-matter/invenio-rdm:v11.0
+    image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     restart: "unless-stopped"
     environment:
       - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
@@ -126,15 +136,19 @@ services:
       - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
+      - "INVENIO_MAIL_SUPPRESS_SEND=False"
+      - "INVENIO_MAIL_SERVER = '127.0.0.1'"
+      - "INVENIO_MAIL_PORT = 1025"
+      - "INVENIO_RDM_SEARCH = {'facets': ['access_status', 'resource_type', 'subject'], 'sort': ['bestmatch', 'newest', 'oldest', 'version']}"
     command: ["uwsgi /opt/invenio/var/instance/uwsgi_rest.ini --uid invenio"]
     ports:
       - "5000"
     volumes:
       - ./invenio/app_data:/opt/invenio/var/instance/app_data
-      - uploaded_data:/opt/invenio/var/instance/data
-      - archived_data:/opt/invenio/var/instance/archive
+      - ./invenio/uploaded_data:/opt/invenio/var/instance/data
+      - ./invenio/archived_data:/opt/invenio/var/instance/archive
   worker:
-    image: ghcr.io/front-matter/invenio-rdm:v11.0
+    image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     restart: "unless-stopped"
     environment:
       - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
@@ -148,9 +162,12 @@ services:
       - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
       - "INVENIO_WSGI_PROXIES=2"
       - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
+      - "INVENIO_MAIL_SUPPRESS_SEND=False"
+      - "INVENIO_MAIL_SERVER = '127.0.0.1'"
+      - "INVENIO_MAIL_PORT = 1025"
     command: ["celery -A invenio_app.celery worker --beat --loglevel=WARNING"]
     volumes:
-      - uploaded_data:/opt/invenio/var/instance/data
+      - ./invenio/uploaded_data:/opt/invenio/var/instance/data
     depends_on:
       search:
         condition: service_started
@@ -160,8 +177,10 @@ services:
         condition: service_started
       mq:
         condition: service_started
+      mailhog:
+        condition: service_started
   web-api-init:
-    image: ghcr.io/front-matter/invenio-rdm:v11.0
+    image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     restart: "no"
     environment:
       - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
@@ -184,6 +203,8 @@ services:
       db:
         condition: service_started
       mq:
+        condition: service_started
+      mailhog:
         condition: service_started
     volumes:
       - ./invenio/init.sh:/opt/invenio/src/init.sh
