@@ -5,6 +5,16 @@ subjects:
       name: Fields of Science and Technology
       uri: "http://www.oecd.org/science/inno/38235147.pdf"
       data-file: vocabularies/subjects_oecd_fos.yaml
+    - id: SDG
+      name: Sustainable Development Goals
+      uri: "https://www.un.org/sustainabledevelopment/"
+      data-file: vocabularies/subjects_sdg.yaml
+resourcetypes:
+  pid-type: rsrct
+  data-file: vocabularies/resource_types.yaml
+communitytypes:
+  pid-type: comtyp
+  data-file: vocabularies/community_types.yaml
 # TODO: Uncoment this if you want to have all affiliations with ROR identifiers.
 # affiliations:
 #   pid-type: aff

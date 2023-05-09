@@ -1,0 +1,51 @@
+- id: "https://www.un.org/sustainabledevelopment/poverty/"
+  scheme: SDG
+  subject: "No poverty"
+- id: "https://www.un.org/sustainabledevelopment/zerohunger/"
+  scheme: SDG
+  subject: "Zero hunger"
+- id: "https://www.un.org/sustainabledevelopment/health/"
+  scheme: SDG
+  subject: "Health"
+- id: "https://www.un.org/sustainabledevelopment/education/"
+  scheme: SDG
+  subject: "Education"
+- id: "https://www.un.org/sustainabledevelopment/gender-equality/"
+  scheme: SDG
+  subject: "Gender equality"
+- id: "https://www.un.org/sustainabledevelopment/water-and-sanitation/"
+  scheme: SDG
+  subject: "Clean water and sanitation"
+- id: "https://www.un.org/sustainabledevelopment/energy/"
+  scheme: SDG
+  subject: "Affordable and clean energy"
+- id: "https://www.un.org/sustainabledevelopment/economic-growth/"
+  scheme: SDG
+  subject: "Decent work and economic growth"
+- id: "https://www.un.org/sustainabledevelopment/nfrastructure-industrialization/"
+  scheme: SDG
+  subject: "Industries, innovation and infrastructure"
+- id: "https://www.un.org/sustainabledevelopment/inequality/"
+  scheme: SDG
+  subject: "Reduced inequalities"
+- id: "https://www.un.org/sustainabledevelopment/cities/"
+  scheme: SDG
+  subject: "Sustainable cities and communities"
+- id: "https://www.un.org/sustainabledevelopment/sustainable-consumption-production/"
+  scheme: SDG
+  subject: "Responsible consumption and production"
+- id: "https://www.un.org/sustainabledevelopment/climate-change/"
+  scheme: SDG
+  subject: "Climate action"
+- id: "https://www.un.org/sustainabledevelopment/oceans/"
+  scheme: SDG
+  subject: "Life below water"
+- id: "https://www.un.org/sustainabledevelopment/biodiversity/"
+  scheme: SDG
+  subject: "Life on land"
+- id: "https://www.un.org/sustainabledevelopment/peace-justice/"
+  scheme: SDG
+  subject: "Peace, justice and strong institutions"
+- id: "https://www.un.org/sustainabledevelopment/partnerships/"
+  scheme: SDG
+  subject: "Partnerships for the goals"
