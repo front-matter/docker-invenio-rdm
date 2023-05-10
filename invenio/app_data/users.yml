@@ -1,4 +1,9 @@
-- email: user@demo.org
-  active: False
-  password:
-  
+- email: info@example.org
+  username: info
+  full_name: Info User
+  affiliations: Example
+  active: true
+  confirmed: true
+  password: change_me
+  roles: [admin]
+  allow: []
