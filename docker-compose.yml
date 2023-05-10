@@ -29,10 +29,6 @@ services:
   db:
     image: postgres:12.4
     restart: "unless-stopped"
-    environment:
-      - "POSTGRES_USER=invenio-rdm"
-      - "POSTGRES_PASSWORD=invenio-rdm"
-      - "POSTGRES_DB=invenio-rdm"
     ports:
       - "5432:5432"
   pgadmin:
@@ -40,33 +36,22 @@ services:
     restart: "unless-stopped"
     ports:
       - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "info@example.org"
-      PGADMIN_DEFAULT_PASSWORD: "invenio-rdm"
   mq:
     image: rabbitmq:3-management
     restart: "unless-stopped"
-    environment:
-      - "RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{error}]"
     ports:
       - "15672:15672"
       - "5672:5672"
   mailhog:
     image: mailhog/mailhog:v1.0.1
     logging:
-      driver: 'none'  # disable saving logs
+      driver: 'none'
     ports:
-      - 1025:1025 # smtp server
-      - 8025:8025 # web ui
+      - "1025:1025"
+      - "8025:8025"
   search:
     image: opensearchproject/opensearch:2.3.0
     restart: "unless-stopped"
-    environment:
-      - bootstrap.memory_lock=true
-      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
-      - "DISABLE_INSTALL_DEMO_CONFIG=true"
-      - "DISABLE_SECURITY_PLUGIN=true"
-      - "discovery.type=single-node"
     ulimits:
       memlock:
         soft: -1
@@ -84,9 +69,6 @@ services:
       - "5601:5601"
     expose:
       - "5601"
-    environment:
-      - 'OPENSEARCH_HOSTS=["http://search:9200"]'
-      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
   frontend:
     image: ghcr.io/front-matter/invenio-rdm-frontend:v12.0.0b2.dev2
     restart: "unless-stopped"
@@ -100,20 +82,7 @@ services:
       - "443:443"
   web-ui:
     image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
-      - "INVENIO_WSGI_PROXIES=2"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-      - "INVENIO_THEME_SHOW_FRONTPAGE_INTRO_SECTION=True"
-      - "INVENIO_DATACITE_ENABLED=True"
+    restart: "unless-stopped"
     command: ["uwsgi /opt/invenio/var/instance/uwsgi_ui.ini --uid invenio"]
     ports:
       - "5000"
@@ -124,22 +93,6 @@ services:
   web-api:
     image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     restart: "unless-stopped"
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
-      - "INVENIO_WSGI_PROXIES=2"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-      - "INVENIO_MAIL_SUPPRESS_SEND=False"
-      - "INVENIO_MAIL_SERVER = '127.0.0.1'"
-      - "INVENIO_MAIL_PORT = 1025"
-      - "INVENIO_RDM_SEARCH = {'facets': ['access_status', 'resource_type', 'subject'], 'sort': ['bestmatch', 'newest', 'oldest', 'version']}"
     command: ["uwsgi /opt/invenio/var/instance/uwsgi_rest.ini --uid invenio"]
     ports:
       - "5000"
@@ -150,21 +103,6 @@ services:
   worker:
     image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     restart: "unless-stopped"
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
-      - "INVENIO_WSGI_PROXIES=2"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
-      - "INVENIO_MAIL_SUPPRESS_SEND=False"
-      - "INVENIO_MAIL_SERVER = '127.0.0.1'"
-      - "INVENIO_MAIL_PORT = 1025"
     command: ["celery -A invenio_app.celery worker --beat --loglevel=WARNING"]
     volumes:
       - ./invenio/uploaded_data:/opt/invenio/var/instance/data
@@ -182,18 +120,6 @@ services:
   web-api-init:
     image: ghcr.io/front-matter/invenio-rdm:v12.0.0b2.dev2
     restart: "no"
-    environment:
-      - "INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1"
-      - "INVENIO_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CACHE_REDIS_URL=redis://cache:6379/0"
-      - "INVENIO_CACHE_TYPE=redis"
-      - "INVENIO_CELERY_BROKER_URL=amqp://guest:guest@mq:5672/"
-      - "INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2"
-      - "INVENIO_SEARCH_HOSTS=['search:9200']"
-      - "INVENIO_SECRET_KEY=CHANGE_ME"
-      - "INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://invenio-rdm:invenio-rdm@db/invenio-rdm"
-      - "INVENIO_WSGI_PROXIES=2"
-      - "INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3"
     entrypoint: [ "bash", "init.sh"] 
     depends_on:
       search:

@@ -1,3 +1,2 @@
-.env
 docker-compose.override.yml
 invenio/uploaded_data
