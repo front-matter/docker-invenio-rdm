@@ -33,12 +33,11 @@ invenio rdm-records rebuild-index
 invenio communities rebuild-index
 
 # Steps to declare the MQ queues required for statistics, etc.
+echo "setting up mq queues..."
 invenio queues declare
 
 # create demo records
-echo "creating demo communities..."
 invenio rdm-records demo communities
-echo "creating demo records..."
 invenio rdm-records demo records
 
 # add user with admin role
