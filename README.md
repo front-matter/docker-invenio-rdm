@@ -10,7 +10,7 @@ Docker Compose configuration for [InvenioRDM](https://inveniordm.docs.cern.ch/),
 
 The Compose file included here uses existing Docker images for InvenioRDM and its dependencies. It does not build images from source, and it does not have other dependencies besider Docker itself. The initial setup of InvenioRDM should not take more than 15 minutes.
 
-Compose is the easiest way to run [InvenioRDM](https://inveniordm.docs.cern.ch/). This makes Docker Compose perfect for testing, and staging environments. It is not recommended to use it in production, for production deployments, use a container orchestrator such as [Kubernetes](https://kubernetes.io/), [Elastic Container Service](https://aws.amazon.com/ecs/), or [Nomad](https://www.nomadproject.io/).
+Compose is the easiest way to run [InvenioRDM](https://inveniordm.docs.cern.ch/). This makes Docker Compose perfect for testing and staging environments. It is not recommended to use it in production, for production deployments, use a container orchestrator such as [Kubernetes](https://kubernetes.io/), [OpenShift](https://docs.openshift.com/), [Elastic Container Service](https://aws.amazon.com/ecs/), or [Nomad](https://www.nomadproject.io/).
 
 More work is needed to set up development environments with Compose, for now please use [invenio-cli](https://github.com/inveniosoftware/invenio-cli) and follow the [instructions](https://inveniordm.docs.cern.ch/develop/getting-started/instance-development/]) in the InvenioRDM documentation.
 
