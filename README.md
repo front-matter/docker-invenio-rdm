@@ -10,7 +10,7 @@ Docker Compose configuration for [InvenioRDM](https://inveniordm.docs.cern.ch/),
 
 The Compose file included here uses existing Docker images for InvenioRDM and its dependencies. It does not build images from source, and it does not have other dependencies besider Docker itself. The initial setup of InvenioRDM should not take more than 15 minutes.
 
-Compose is the easiest way to run [InvenioRDM](https://inveniordm.docs.cern.ch/). This makes Docker Compose perfect for testing and staging environments. It is not recommended to use it in production, for production deployments, use a container orchestrator such as [Kubernetes](https://kubernetes.io/), [OpenShift](https://docs.openshift.com/), [Elastic Container Service](https://aws.amazon.com/ecs/), or [Nomad](https://www.nomadproject.io/).
+Compose is the easiest way to run [InvenioRDM](https://inveniordm.docs.cern.ch/). This makes Docker Compose perfect for testing and staging environments. It is not recommended to use it in production, for production deployments, use a container orchestrator such as [Kubernetes](https://kubernetes.io/), [OpenShift](https://docs.openshift.com/), [Elastic Container Service](https://aws.amazon.com/ecs/), or [Nomad](https://www.nomadproject.io/), or a deployment tool such as [MRSK](https://mrsk.dev/).
 
 More work is needed to set up development environments with Compose, for now please use [invenio-cli](https://github.com/inveniosoftware/invenio-cli) and follow the [instructions](https://inveniordm.docs.cern.ch/develop/getting-started/instance-development/]) in the InvenioRDM documentation.
 
@@ -30,6 +30,10 @@ More work is needed to set up development environments with Compose, for now ple
 ## Documentation
 
 Detailed InvenioRDM documentation is [here](https://inveniordm.docs.cern.ch/).
+
+## More Work Needed
+
+The Compose file is work in progress. It depends on InvenioRDM Docker images built with `invenio-cli`, and they could be improved, e.g. by better handling of environmental variables, easier nginx web server integration, and better documentation. The `web-api-init` container that runs once at Docker Compose startup could be integrated into the existing containers.
 
 ## License
 

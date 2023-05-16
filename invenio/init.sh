@@ -8,6 +8,8 @@ invenio alembic upgrade heads
 # set location for file uploads
 echo "setting location for file uploads..."
 invenio files location create data /opt/invenio/var/instance/data --default
+# or use an AWS S3 compatible object storage
+# invenio files location s3-default s3://new-bucket --default
 
 # add admin role
 echo "creating admin role with superuser-access..."

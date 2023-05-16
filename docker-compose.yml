@@ -27,7 +27,7 @@ services:
     ports:
       - "6379:6379"
   db:
-    image: postgres:12.4
+    image: postgres:15.2
     restart: "unless-stopped"
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-invenio_rdm}
@@ -82,8 +82,12 @@ services:
   frontend:
     image: "ghcr.io/front-matter/invenio-rdm-frontend:${INVENIO_RDM_VERSION:-latest}"
     restart: "unless-stopped"
+    environment:
+      - UI_SERVER=web-ui
+      - API_SERVER=web-api
     volumes:
       - static_data:/opt/invenio/var/instance/static
+      - .invenio/templates:/etc/nginx/templates
     depends_on:
       - web-ui
       - web-api
@@ -101,7 +105,7 @@ services:
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
       - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
       - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
-      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@db/${POSTGRES_DB:-invenio_rdm}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@${POSTGRES_HOST:-db}/${POSTGRES_DB:-invenio_rdm}
       - "INVENIO_SEARCH_HOSTS=['search:9200']"
       - INVENIO_WSGI_PROXIES=2
       - INVENIO_SECRET_KEY=CHANGE_ME
@@ -124,13 +128,13 @@ services:
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
       - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
       - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
-      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@db/${POSTGRES_DB:-invenio_rdm}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@${POSTGRES_HOST:-db}/${POSTGRES_DB:-invenio_rdm}
       - "INVENIO_SEARCH_HOSTS=['search:9200']"
       - INVENIO_WSGI_PROXIES=2
       - INVENIO_SECRET_KEY=CHANGE_ME
     command: ["uwsgi /opt/invenio/var/instance/uwsgi_rest.ini --uid invenio"]
     ports:
-      - "5000"
+      - "6000"
     volumes:
       - ./invenio/app_data:/opt/invenio/var/instance/app_data
       - ./invenio/uploaded_data:/opt/invenio/var/instance/data
@@ -146,7 +150,7 @@ services:
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
       - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
       - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
-      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@db/${POSTGRES_DB:-invenio_rdm}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@${POSTGRES_HOST:-db}/${POSTGRES_DB:-invenio_rdm}
       - "INVENIO_SEARCH_HOSTS=['search:9200']"
       - INVENIO_WSGI_PROXIES=2
       - INVENIO_SECRET_KEY=CHANGE_ME
@@ -173,7 +177,7 @@ services:
       - INVENIO_ACCOUNTS_SESSION_REDIS_URL=redis://cache:6379/1
       - INVENIO_CELERY_RESULT_BACKEND=redis://cache:6379/2
       - INVENIO_RATELIMIT_STORAGE_URL=redis://cache:6379/3
-      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@db/${POSTGRES_DB:-invenio_rdm}
+      - INVENIO_SQLALCHEMY_DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER:-invenio_rdm}:${POSTGRES_PASSWORD:-invenio_rdm}@${POSTGRES_HOST:-db}/${POSTGRES_DB:-invenio_rdm}
       - "INVENIO_SEARCH_HOSTS=['search:9200']"
       - INVENIO_WSGI_PROXIES=2
       - INVENIO_SECRET_KEY=CHANGE_ME
